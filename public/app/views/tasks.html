@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>
+		<content>
+			<div class="container">
+				<div class="form-group">
+					<div class="col-md-10 col-md-offset-1">				
+							<div class="space-bottom10 text-big text-center" translate>
+								Events on the map	
+							</div>
+							<div ng-if="profileid != undefined" class="col-md-8 col-md-offset-4 space-bottom10">
+								<input class="mid-checkbox text-center" type="checkbox" ng-change="toggleMarkers()" ng-model="taskFilter.langFilter" value="true"/><span class="text-mid text-center space-left10"><translate>Tasks only in a familiar language</translate></span>
+							</div>							
+							<div class="space-bottom20 text-small">
+							
+									
+								<table class="center90">
+									<tr>
+										<col width="23%">
+										<col width="2%">
+										<col width="20%">
+										<col width="20%">
+										<col width="20%">
+										<col width="15%">
+										
+										<td class="text-right">
+											<span class="text-mid" translate>Tasks: </span>
+										</td>
+										<td>											
+										</td>
+										<td>
+											<input class="mid-checkbox" type="checkbox" ng-change="toggleMarkers()" ng-model="taskFilter.freshFilter" value="true"/> <translate>Fresh tasks</translate>
+										</td>
+										<td>	
+											<input class="mid-checkbox" type="checkbox" ng-change="toggleMarkers()" ng-model="taskFilter.localFilter" value="true"/> <translate>Local tasks</translate>
+										</td>
+										<td>	
+											<input class="mid-checkbox" type="checkbox" ng-change="toggleMarkers()" ng-model="taskFilter.regionalFilter" value="true"/> <translate>Regional tasks</translate>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-right">
+											<span class="text-mid" translate>Category groups: </span>
+										</td>
+										<td>											
+										</td>
+										<td>											
+											<input type="checkbox" class="mid-checkbox" ng-change="toggleMarkers()" ng-model="catFilter.catGroup1" value="true"/> <translate>Emergency</translate>
+										</td>
+										
+										<td>										
+											<input type="checkbox" class="mid-checkbox" ng-change="toggleMarkers()" ng-model="catFilter.catGroup2" value="true"/> <translate>Task</translate>
+										</td>
+										<td>										
+											<input type="checkbox" class="mid-checkbox" ng-change="toggleMarkers()" ng-model="catFilter.catGroup3" value="true"/> <translate>Commerce</translate>
+										</td>
+										<td>										
+											<input type="checkbox" class="mid-checkbox" ng-change="toggleMarkers()" ng-model="catFilter.catGroup4" value="true"/> <translate>Help</translate>
+										</td>
+									</tr>									
+								</table>	
+							</div>
+
+							<div class="space20">	
+								<input id="pac-input" type="text" placeholder="Search Place" class="controls">
+								<div id="map"></div>
+							</div>
+						</div>
+				</div>		
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">	
+						<hr/>
+					</div>	
+				</div>				
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<a class="btn btn-lg btn-metathesis btn-block" ui-sref="app.taskadd" role="button" ng-click="jumboContent()" translate>Add Task</a>
+					</div>	
+				</div>				
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">	
+						<hr/>
+					</div>	
+				</div>				
+			</div>
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div class="col-md-2 ">
+							<div class="col-md-6 space-bottom20">
+								<a class="btn btn-md btn-metathesis" role="button" ng-click="viewFTaskList = false"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></a>
+							</div>	
+							<div class="col-md-6">
+								<a class="btn btn-md btn-metathesis" role="button" ng-click="viewFTaskList = true"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></a>
+							</div>
+						</div>
+						<div class="col-md-8 text-big content-text-center" translate>Fresh tasks</div>
+						<div class="col-md-2 ">
+							
+						</div>
+					</div>	
+				</div>		
+			</div>
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div ng-if="!showFreshTask">
+							<div class="text-biggest text-center">{{message}}</div>
+						</div>
+						<div ng-if="showFreshTask">
+							
+							<div ng-if="freshTasks.length == 0" class="text-mid content-text-center space-bottom40" translate>
+								Sorry, but at the moment, there are no fresh tasks added last 24 hours for you in your notification area.<br>You can try to increase your notification area.<br>Do not be discouraged, you can always find an task for yourself through the menu of tasks.
+							</div>
+							<div ng-if="freshTasks.length != 0">								
+								<div class="col-md-9 col-md-12">
+									<div class="row space-bottom10">													
+										<div class="col-md-12">
+											<text-mid for="fsearch" translate>Search:</text-mid>
+											<input ng-model="fSearch" id="fsearch" class="form-control" placeholder="{{filterTextPlaceholder}}">
+										</div>
+									</div>	
+								</div>
+								<div ng-if="viewFTaskList == false">	
+									<div class="col-md-3 col-md-12">
+										<div class="row space-bottom10">		
+											<div class="col-md-12">
+												<text-mid for="fsearch" translate>Cards per page:</text-mid>
+												<input type="number" min="3" max="30" class="form-control" ng-model="pageSizeRow" step="3">
+											</div>
+										</div>	
+									</div>									
+									<div class="col-md-12">
+										<div dir-paginate="task in freshTasks | filter:fSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="userFTasksRow" current-page="currentPageRow">
+											<div class="col-md-4 col-md-6">
+												<div class="thumbnail space20 taskCard">
+													<div class="media-body">																					
+														<div class="text-mid content-text-center"><a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})" ng-bind-html="titleFCard = task.langs[0].title.substring(0,55)"></a></div>
+														<div class="text-big text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>
+														<a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div ng-if="task.images[0]">
+																<img class="img-responsive img-thumbnail" ng-src="{{task.images[0]}}.thumb-card.jpg" >
+															</div>
+															<div ng-if="!task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+															</div>
+														</a>
+														<text-small-plus class="vertical-center" ng-bind-html="task.langs[0].shortdescription"></text-small-plus>
+														<table class="tasktumbs-footer">							
+															<tr>
+																<td class="text-right">
+																	<text-small translate>Published:</text-small>
+																</td>
+																<td class="text-padding10">
+																	<text-small>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																</td>
+															</tr>														 
+														</table>						
+													</div>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="userFTasksRow" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>
+										
+								</div>
+
+								<div ng-if="viewFTaskList == true">									
+									<div class="col-md-3 col-md-12">
+										<div class="row space-bottom10">		
+											<div class="col-md-12">
+												<text-mid for="fsearch" translate>Items per page:</text-mid>
+												<input type="number" min="1" max="30" class="form-control" ng-model="pageSizeList">
+											</div>											
+										</div>	
+									</div>									
+									<div class="col-md-12">									
+										<ul class="media-list"> 
+											<li class="media" dir-paginate="task in freshTasks | filter:fSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeList" pagination-id="userFTasksList" current-page="currentPageList">
+												<div class="media-body">
+													<div class="col-md-4">															
+														<a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div ng-if="task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="{{task.images[0]}}.thumb-card.jpg" >
+															</div>
+															<div ng-if="!task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+															</div>
+														</a>														
+													</div>
+													<div class="col-md-8 nodecore taskRow">
+														<a class="nodecore" ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div class="text-big text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>
+															<div class="text-mid content-text-center" ng-bind-html="titleFRow = task.langs[0].title.substring(0,160)"></div>
+															<text-small-plus class="vertical-center" ng-bind-html="task.langs[0].shortdescription"></text-small-plus>
+															<div class="center">
+																<table class="tasklist-footer">
+																	<tr>
+																		<td class="text-right">
+																			<text-small translate>Published:</text-small>
+																		</td>
+																		<td class="text-padding10">
+																			<text-small>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																		</td>
+																	</tr>														 
+																</table>
+															</div>
+														</a>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="userFTasksList" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>
+								</div>
+								
+							</div>
+							
+						</div>
+					</div>	
+				</div>		
+			</div>
+				
+			<div class="container">
+				<div class="row">
+					<hr/>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<section class="parallax-1 text-center">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="panel panel-transparent-tips"> 
+								<div class="row row-content">
+									<div class="col-md-10 col-md-offset-1 height130">
+										<div ng-if="!showTips">
+											<div class="text-biggest text-center">{{message}}</div>
+										</div>
+										<div ng-if="showTips">
+											<div class="media-body media-body-tips">
+												<h2 class="media-heading">{{tip1.title}} </h2>
+												<div class="text-small-plus">
+													{{tip1.text}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>						 
+						</div>
+					</section>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<hr/>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div class="col-md-2 ">
+							<div class="col-md-6 space-bottom20">
+								<a class="btn btn-md btn-metathesis" role="button" ng-click="viewLTaskList = false"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></a>
+							</div>	
+							<div class="col-md-6">
+								<a class="btn btn-md btn-metathesis" role="button" ng-click="viewLTaskList = true"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></a>
+							</div>
+						</div>
+						<div class="col-md-8 text-big content-text-center" translate>Local tasks</div>
+						<div class="col-md-2 ">
+						</div>
+					</div>	
+				</div>		
+			</div>
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div ng-if="!showLocalTask">
+							<div class="text-biggest text-center">{{message}}</div>
+						</div>
+						<div ng-if="showLocalTask">
+							
+							<div ng-if="localTasks.length == 0" class="text-mid content-text-center" translate>
+								Sorry, there are no local tasks yet.
+							</div>
+							<div ng-if="localTasks.length != 0">
+									<div class="col-md-9 col-md-12">
+										<div class="row space-bottom10">
+											<div class="col-md-12">
+												<text-mid for="lsearch" translate>Search:</text-mid>
+												<input ng-model="lSearch" id="lsearch" class="form-control" placeholder="{{filterTextPlaceholder}}">
+											</div>
+										</div>	
+									</div>
+								<div ng-if="viewLTaskList == false">	
+									<div class="col-md-3 col-md-12">
+										<div class="row space-bottom10">		
+											<div class="col-md-12">
+												<text-mid for="lsearch" translate>Cards per page:</text-mid>
+												<input type="number" min="3" max="30" class="form-control" ng-model="pageSizeRow" step="3">
+											</div>
+										</div>	
+									</div>									
+									<div class="col-md-12">
+										<div dir-paginate="task in localTasks | filter:lSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="userLTasksRow" current-page="currentPageRow">
+											<div class="col-md-4 col-md-6">
+												<div class="thumbnail space20 taskCard">
+													<div class="media-body">																					
+														<div class="text-mid content-text-center"><a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})" ng-bind-html="titleLCard = task.langs[0].title.substring(0,55)"></a></div>
+														<div class="text-big text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>
+														<a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div ng-if="task.images[0]">
+																<img class="img-responsive img-thumbnail" ng-src="{{task.images[0]}}.thumb-card.jpg" >
+															</div>
+															<div ng-if="!task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+															</div>
+														</a>
+														<text-small-plus class="vertical-center" ng-bind-html="task.langs[0].shortdescription"></text-small-plus>
+														<table class="tasktumbs-footer">							
+															<tr>
+																<td class="text-right">
+																	<text-small translate>Published:</text-small>
+																</td>
+																<td class="text-padding10">
+																	<text-small>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																</td>
+															</tr>
+														</table>						
+													</div>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="userLTasksRow" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>
+										
+								</div>
+
+								<div ng-if="viewLTaskList == true">									
+									<div class="col-md-3 col-md-12">
+										<div class="row space-bottom10">		
+											<div class="col-md-12">
+												<text-mid for="lsearch" translate>Items per page:</text-mid>
+												<input type="number" min="1" max="30" class="form-control" ng-model="pageSizeList">
+											</div>											
+										</div>	
+									</div>									
+									<div class="col-md-12">									
+										<ul class="media-list"> 
+											<li class="media" dir-paginate="task in localTasks | filter:lSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeList" pagination-id="userLTasksList" current-page="currentPageList">
+												<div class="media-body">
+													<div class="col-md-4">															
+														<a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div ng-if="task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="{{task.images[0]}}.thumb-card.jpg" >
+															</div>
+															<div ng-if="!task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+															</div>
+														</a>
+														
+													</div>
+													<div class="col-md-8 nodecore taskRow">
+														<a class="nodecore" ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div class="text-big text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>
+															<div class="text-mid content-text-center" ng-bind-html="titleLRow = task.langs[0].title.substring(0,160)"></div>
+															<text-small-plus class="vertical-center" ng-bind-html="task.langs[0].shortdescription"></text-small-plus>
+															<div class="center">
+																<table class="tasklist-footer">	
+																	<tr>
+																		<td class="text-right">
+																			<text-small translate>Published:</text-small>
+																		</td>
+																		<td class="text-padding10">
+																			<text-small>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																		</td>
+																	</tr>			 
+																</table>
+															</div>
+														</a>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="userLTasksList" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>
+								</div>								
+							</div>							
+						</div>
+					</div>	
+				</div>		
+			</div>
+			
+			
+			<div class="container">
+				<div class="row">
+					<hr/>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<section class="parallax-1 text-center">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="panel panel-transparent-tips"> 
+								<div class="row row-content">
+									<div class="col-md-10 col-md-offset-1 height130">
+										<div ng-if="!showTips">
+											<div class="text-biggest text-center">{{message}}</div>
+										</div>
+										<div ng-if="showTips">
+											<div class="media-body media-body-tips">
+												<h2 class="media-heading">{{tip2.title}} </h2>
+												<div class="text-small-plus">
+													{{tip2.text}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>					 
+						</div>
+					</section>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<hr/>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div class="col-md-2 ">
+							<div class="col-md-6 space-bottom20">
+								<a class="btn btn-md btn-metathesis" role="button" ng-click="viewRTaskList = false"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></a>
+							</div>	
+							<div class="col-md-6">
+								<a class="btn btn-md btn-metathesis" role="button" ng-click="viewRTaskList = true"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></a>
+							</div>
+						</div>
+						<div class="col-md-8 text-big content-text-center" translate>Regional tasks</div>
+						<div class="col-md-2 ">
+							
+						</div>
+					</div>	
+				</div>		
+			</div>
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div ng-if="!showRegionalTasks">
+							<div class="text-biggest text-center">{{message}}</div>
+						</div>
+						<div ng-if="showRegionalTasks">
+							
+							<div ng-if="regionalTasks.length == 0" class="text-mid content-text-center" translate>
+								Sorry, there are no regional tasks.
+							</div>
+							<div ng-if="regionalTasks.length != 0">	
+								
+									<div class="col-md-9 col-md-12">
+										<div class="row space-bottom10">													
+											<div class="col-md-12">
+												<text-mid for="rsearch" translate>Search:</text-mid>
+												<input ng-model="rSearch" id="rsearch" class="form-control" placeholder="{{filterTextPlaceholder}}">
+											</div>
+										</div>	
+									</div>
+								<div ng-if="viewRTaskList == false">	
+									<div class="col-md-3 col-md-12">
+										<div class="row space-bottom10">		
+											<div class="col-md-12">
+												<text-mid for="rsearch" translate>Cards per page:</text-mid>
+												<input type="number" min="3" max="30" class="form-control" ng-model="pageSizeRow" step="3">
+											</div>
+										</div>	
+									</div>									
+									<div class="col-md-12">
+										<div dir-paginate="task in regionalTasks | filter:rSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="userRTasksRow" current-page="currentPageRow">
+											<div class="col-md-4 col-md-6">
+												<div class="thumbnail space20 taskCard">
+													<div class="media-body">																					
+														<div class="text-mid text-center"><a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})" ng-bind-html="titleRCard = task.langs[0].title.substring(0,55)"></a></div>
+														<div class="text-big text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>
+														<a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div ng-if="task.images[0]">
+																<img class="img-responsive img-thumbnail" ng-src="{{task.images[0]}}.thumb-card.jpg" >
+															</div>
+															<div ng-if="!task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+															</div>
+														</a>
+														<text-small-plus ng-bind-html="task.langs[0].shortdescription"></text-small-plus>
+														<table class="tasktumbs-footer">
+															<tr>
+																<td class="text-right">
+																	<text-small translate>Published:</text-small>
+																</td>
+																<td class="text-padding10">
+																	<text-small>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																</td>
+															</tr>														 
+														</table>						
+													</div>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="userRTasksRow" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>
+										
+								</div>
+
+								<div ng-if="viewRTaskList == true">									
+									<div class="col-md-3 col-md-12">
+										<div class="row space-bottom10">		
+											<div class="col-md-12">
+												<text-mid for="rsearch" translate>Items per page:</text-mid>
+												<input type="number" min="1" max="30" class="form-control" ng-model="pageSizeList">
+											</div>											
+										</div>	
+									</div>									
+									<div class="col-md-12">									
+										<ul class="media-list"> 
+											<li class="media" dir-paginate="task in regionalTasks | filter:rSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeList" pagination-id="userRTasksList" current-page="currentPageList">
+												<div class="media-body">
+													<div class="col-md-4">															
+														<a ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div ng-if="task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="{{task.images[0]}}.thumb-card.jpg" >
+															</div>
+															<div ng-if="!task.images[0]">
+																<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+															</div>
+														</a>
+														
+													</div>
+													<div class="col-md-8 nodecore taskRow">
+														<a class="nodecore" ui-sref="app.taskpublic({id: task._id, '#': 'mainNavbar'})">
+															<div class="text-big text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>
+															<div class="text-mid content-text-center" ng-bind-html="titleRRow = task.langs[0].title.substring(0,160)"></div>
+															<text-small-plus class="vertical-center" ng-bind-html="task.langs[0].shortdescription"></text-small-plus>
+															<div class="center">
+																<table class="tasklist-footer">	
+																	<tr>
+																		<td class="text-right">
+																			<text-small translate>Published:</text-small>
+																		</td>
+																		<td class="text-padding10">
+																			<text-small>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																		</td>
+																	</tr>														 
+																</table>
+															</div>
+														</a>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="userRTasksList" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>
+								</div>								
+							</div>							
+						</div>
+					</div>	
+				</div>		
+			</div>
+		</content>
+	</body>
+</html>

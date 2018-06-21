@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="Task Private" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>		
+		<div class="modal-form-body row">
+			<div>
+				<div class="modal-header">
+					<div class="modal-header-text content-text-center" translate>Info</div>
+				</div>
+				<div class="">&nbsp;</div>
+				<div class="col-md-10 col-md-offset-1">
+					<div class="col-md-12 modal-info content-text-center">
+						<div class="{{infodiv}}">
+							<text-big>{{info}}</text-big>
+						</div>	
+						<div ng-show="infomid != null">
+							<div class="text-mid" ng-bind-html="infomid"></div>
+						</div>
+					</div>
+					<div class="col-md-6 col-md-offset-3 modal-margin10" ng-show="infoOk == true">
+						<div class="ngdialog-buttons">
+							<button class="btn btn-lg btn-success btn-block" type="button" ng-click="closeThisDialog()"><translate>I got it</translate></button>
+						</div>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

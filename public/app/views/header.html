@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="Task Private" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>		
+		<header>
+			<div class="container-fluid">
+				<div class="row">
+					<section class="parallax-header text-center">
+						<div class="container">						
+							<div class="col-md-2 col-md-offset-10">
+								<div class="row">
+									<div class="menulang">
+										<ui-select ng-model="visitorLang.selected" on-select="onSelectCallback(visitorLang.selected)" search-enabled="false" ng-disabled="disabled" close-on-select="true">
+											<ui-select-match class="langselectcss">{{$select.selected.title}} </ui-select-match>
+											<ui-select-choices repeat="nlang.id as nlang in mainLangArray" position="up">
+												<div ng-bind-html="nlang.title"></div>
+											</ui-select-choices>
+										</ui-select>								
+									</div>	
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>	
+			<nav class="bg-success navbar-default metabar" id="navbar" data-spy="affix" data-offset-top="250">
+				<div class="container-fluid">
+					<div class="container">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavbar" aria-expanded="false" aria-controls="navbar">
+								<span class="sr-only"><translate>Toggle navigation</translate></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" ui-sref="app">
+								<img src="images/logo_01.png" alt="Metathesis">
+							</a>
+						</div>
+						<div id="mainNavbar" class="navbar-collapse collapse">
+							<ul class="nav navbar-nav"> 
+								<li ng-class="{active: stateis('app')} || stateis('app.info') || stateis('app.infodetails')">
+									<a data-toggle="collapse" data-target="#mainNavbar" ui-sref="app({'#': 'mainNavbar'})" ng-click="jumboContent()"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> <translate>News</translate></a>
+								</li>
+								<li ng-class="{active: stateis('app.tasks') || stateis('app.taskpublic') || stateis('app.taskprivate') || stateis('app.taskadd') || stateis('app.taskedit') || stateis('app.candidate')}">
+									<a data-toggle="collapse" data-target="#mainNavbar" ui-sref="app.tasks({'#': 'mainNavbar'})" ng-click="jumboContent()"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <translate>Tasks</translate></a>
+								</li>
+								<li ng-class="{active: stateis('app.contact')}">
+									<a data-toggle="collapse" data-target="#mainNavbar" ui-sref="app.contact({'#': 'mainNavbar'})" ng-click="jumboContent()"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <translate>Contact</translate></a>
+								</li>
+							</ul>
+							<ul class="nav navbar-nav navbar-right">
+								<li ng-if="!loggedIn">
+									<a data-toggle="collapse" data-target="#mainNavbar" ng-click="openLogin(); setGoBackFalse()"> <span class="glyphicon glyphicon-log-in"></span> <translate>Login</translate></a>
+								</li>
+								<li ng-if="loggedIn" ng-class="{active: stateis('app.profileprivate') || stateis('app.profileedit') }">
+									<a data-toggle="collapse" data-target="#mainNavbar" ui-sref="app.profileprivate({id: profileid, '#': 'mainNavbar'})" ng-click="jumboContent(); goback = true;"><span class="glyphicon glyphicon-user" aria-hidden="true" ></span> <translate>Profile</translate></a>
+								</li>
+								<li ng-if="loggedIn">
+									<a data-toggle="collapse" data-target="#mainNavbar" ui-sref="app({'#': 'mainNavbar'})" ng-click="logOut()"> <span class="glyphicon glyphicon-log-out"></span> <translate>Logout</translate></a>
+								</li>
+							</ul>
+						</div>
+					</div>			
+				</div>
+			</nav>	
+			<div class="container" id="jumbo"></div>
+			<div class="jumbotron-parallax jumbotron">
+				<div class="container">
+					<div class="row">
+						<div class="panel-transparent-jumbotron container">
+							<div class="col-md-12" style="height: 130px;">
+								<div ng-if="!showNews">
+									<h3 class="media-heading">{{message}}</h3>
+								</div>
+								<div ng-if="showNews">
+									<div class="col-xs-6 col-md-3">
+										<div class="media-left media-middle media-body-img">
+											<img class="thumbnail" ng-src="{{news.image}}">
+										</div>								 
+									</div>
+									<div class="col-md-9">
+										<div class="media-body media-body-news">
+											<h2 class="media-heading">{{news.title}} </h2>
+											<div class="text-small-plus">
+												{{news.description}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row panel-transparent-jumbotron-content">
+							</div>
+							<p> <a class="btn btn-md pull-right btn-metathesis" ui-sref="app.infodetails({id: news._id, '#': 'mainNavbar'})"  role="button" ng-click="jumboContent()"  translate>Learn more...</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+				<div class="container"> 
+					<div class="row">
+						<hr>		
+					</div>
+				</div>
+
+		</header>
+		<script src="scripts/parallax.js"></script>
+	</body>
+</html>

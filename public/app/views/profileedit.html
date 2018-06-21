@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>
+		<content>
+			<div ng-if="!showEditProfile">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="col-md-10 col-md-offset-1"> 
+								<div class="text-biggest text-center">{{message}}</div>
+							</div>
+						</div>
+					</div>
+				</div>	 
+			</div>
+			<div ng-if="showEditProfile">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="text-big text-center"><translate>Edit profile</translate> {{profile.fullname}}</div>
+						</div>
+					</div>					
+				</div>
+				<div class="container">
+					<div class="row">						
+						<div class="col-md-10 col-md-offset-1">
+							<hr>
+							<div class="col-md-4" >							
+								<div  id="avatar" class="media-left media-middle media-body-img">
+									<img  check-avatar class="profile-image img-thumbnail" ng-src="{{ imageAvatar }}">
+								</div>
+							</div>
+							<div class="col-md-8">
+								<div class="media-body">
+									<table class="table100">
+										<col class="w40">
+										<tr>
+											<td class="text-right">
+												<text-mid translate>Username:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<text-mid>{{profile.username}}</text-mid>
+											</td>
+										</tr>										 
+										<tr>
+											<td class="text-right">
+												<text-mid translate>Full name:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<text-mid>{{profile.fullname}}</text-mid>
+											</td>
+										</tr>
+										<tr>
+											<td class="text-right">
+												<text-mid translate>E-mail:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<text-mid>{{profile.email}}</text-mid>
+											</td>
+										</tr>
+										<tr>
+											<td class="text-right">
+												<text-mid translate>Registered:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<text-mid>{{profile.createdAt | date:'dd.MM.y HH:mm'}}</text-mid>
+											</td>
+										</tr>										 
+										<tr>
+											<td class="text-right">
+												<text-mid translate>Notification range:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<text-mid>{{profile.range/1000}} km.</text-mid>
+											</td>
+										</tr>
+										<tr>
+											<td class="text-right">
+												<text-mid translate>Profile picture:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<a class="btn btn-md btn-metathesis" role="button" ng-click="imageProfile()"><translate>Choose Avatar</translate></a>
+												<div class="space20">
+												</div>
+											</td>
+										</tr>										
+									</table>									 
+								</div>
+							</div>
+							<div class="col-md-12">
+								<form role="form" name="profileForm" ng-submit="submitProfile()" novalidate>
+									<div class="row"> 
+										<hr>
+									</div>
+									<div class="text-big content-text-center" translate>
+										Languages 								
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="text-mid content-text-center" translate>
+												Interface language 								
+											</div>
+											<div class="text-mid content-text-center" translate>
+												Please choose the language of the site, if your language is not listed, choose one that you understand and in the following list, choose your native language first, it will help to understand which requires an early addition, thanks.								
+											</div>
+											<ui-select on-select="onSelectCallback(profileLang.selected)" ng-model="profileLang.selected" search-enabled="false" ng-disabled="disabled" theme="bootstrap" close-on-select="true">
+												<ui-select-match placeholder="{{mainlangPlaceholder}}">{{$select.selected.title}} </ui-select-match>
+												<ui-select-choices repeat="nlang in mainLangArray">
+												<div ng-bind-html="nlang.title"></div>
+											  </ui-select-choices>
+										</div>
+										<div class="col-md-12">
+											<div class="text-mid content-text-center" translate>
+												More languages 								
+											</div>
+											<div class="text-mid content-text-center" translate>
+												Select all languages with which you can communicate, this will increase your chances of finding assignments and solving task							
+											</div>
+											<ui-select multiple ng-model="profile.morelang" ng-disabled="disabled" sortable="true" close-on-select="false">
+												<ui-select-match placeholder="{{selectLangPlaceholder}}">{{$item.nativeName}}</ui-select-match>
+												<ui-select-choices repeat="lang in langslist | langsFilter: {name: $select.search, nativeName: $select.search}">
+													<div>
+														<span ng-bind-html="lang.nativeName | highlight: $select.search"></span>
+														<span ng-bind-html="' - ' + lang.name | highlight: $select.search"></span>
+													</div> 
+												</ui-select-choices>
+											</ui-select>											
+										</div>										
+									</div>
+									<div class="row"> 
+										<hr>
+									</div>
+									<div class="text-big content-text-center" translate>
+										About me 								
+									</div>
+									<div class="form-group space20">
+										<textarea ui-tinymce="tinymceOptionsFull" name="info" placeholder="About me info" ng-model="profile.info">
+										</textarea>
+										
+									</div>
+									<div class="row"> 
+										<hr>
+									</div>
+									<div class="text-big content-text-center" translate>
+										Skills 								
+									</div>
+									<div class="form-group space20">
+										<textarea ui-tinymce="tinymceOptionsFull"  name="skills" placeholder="About my skills" ng-model="profile.skills">
+										</textarea>										
+									</div>									
+									<div class="row"> 
+										<hr>
+									</div>
+									<div class="space-bottom20 text-big content-text-center" translate>
+										Notification settings	
+									</div>								
+									<div class="space-bottom10">
+										<div class="text-center space-bottom10">
+											<input type="checkbox" class="mid-checkbox" ng-model="profile.settings[0].onlyFamiliarLangs" value="true"/> <span class="text-mid" translate>Tasks only with familiar language</span>
+										</div>
+										
+										<table class="center90 text-center">
+											
+											<tr>
+												<col width="25%">
+												<col width="25%">
+												<col width="25%">
+												<col width="25%">
+												
+												<td>											
+													<input type="checkbox" class="mid-checkbox" ng-model="profile.settings[0].tasksEmergency" value="true"/> <span class="text-mid" translate>Emergency</span>
+												</td>
+												
+												<td>
+													<input type="checkbox" class="mid-checkbox" ng-model="profile.settings[0].tasksTask" value="true"/> <span class="text-mid" translate>Task</span>													
+												</td>
+												<td>
+													<input type="checkbox" class="mid-checkbox" ng-model="profile.settings[0].tasksCommerce" value="true"/> <span class="text-mid" translate>Commerce</span>													 
+												</td>
+												<td>
+													<input type="checkbox" class="mid-checkbox" ng-model="profile.settings[0].tasksHelp" value="true"/> <span class="text-mid" translate>Help</span>													
+												</td>
+											</tr>											
+										</table>	
+									</div>									
+									
+									<div class="row"> 
+										<hr>
+									</div>
+									<div class="text-big content-text-center" translate>
+										Events on the map				
+									</div>
+									<div>
+										<div class="space20"></div>
+										<input id="pac-input" type="text" placeholder="Search Place" class="controls">
+										<div id="map"></div>
+										<div>
+											<input size="20" class="form-control hidden" type="text" ng-model="profile.position.coordinates[1]" id="coordLat" name="coordLat" ng-readonly = "true">
+											<input size="20" class="form-control hidden" type="text" ng-model="profile.position.coordinates[0]" id="coordLon" name="coordLon" ng-readonly = "true">
+											<input size="20" class="form-control hidden" type="text" ng-model="profile.range" id="range" name="range" ng-readonly = "true">
+										</div>
+									</div>
+									<div class="row">
+										<hr>
+										<div class="form-group">
+											<div class="col-md-3 col-md-offset-2 button-wrapper">
+											<a class="btn btn-lg btn-success btn-block" type="submit" ng-click="submitProfile()" translate>Save</a>
+											</div>
+											<div class="col-md-3 col-md-offset-2">
+												<a class="btn btn-lg btn-default btn-block" ui-sref="app.profileprivate({id: profileid})" role="button" ng-click="jumboContent()" translate>Cancel</a>
+											</div>
+										</div>
+									</div>
+								</form>	
+							</div>							
+						</div>
+					</div>					 
+				</div>				 
+			</div>
+		</content>
+	</body>
+</html>

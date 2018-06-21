@@ -1,0 +1,67 @@
+.parallax-header {
+    background-image:url('../images/map6a.jpg');	
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+    color: #fff;
+    background-size: auto;
+    height: 250px;
+    padding-top: 0px;
+    padding-bottom: 10px;
+    overflow: auto;
+}
+
+.jumbotron-parallax {
+    background-image:url('../images/map1.jpg');
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+    color: #fff;
+    background-size: auto;
+    min-height: 365px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    overflow: auto;
+    width: auto;
+}
+
+
+
+.parallax-1 {
+    background-image:url('../images/map1.jpg');
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;	
+    color: #fff;
+    background-size: auto;
+    min-height: 330px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    overflow: auto;
+}
+
+.parallax-2 {
+    background-image:url('../images/map1.jpg');
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;	
+    color: #fff;
+    background-size: cover;
+    min-height: 330px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    overflow: auto;
+}
+
+.parallax-3 {
+    background-image:url('../images/map1.jpg');
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center bottom;	
+    color: #fff;
+    background-size: cover;
+    min-height: 330px;
+    padding-top: 50px;
+    padding-bottom: 0px;
+    overflow: auto;
+}

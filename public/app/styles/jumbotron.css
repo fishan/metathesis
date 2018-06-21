@@ -1,0 +1,11 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+.jumbotron-parallax {
+    background: url('/assets/images/map1.jpg') no-repeat center fixed;
+    color: #fff;
+    background-size: cover;
+    height: 365px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    overflow: auto;
+    width: 100% !important;
+}

@@ -1,0 +1,13 @@
+@import url("../../bower_components/font-awesome/css/font-awesome.min.css"); 
+@import url("../../bower_components/ng-dialog/css/ngDialog.min.css"); 
+@import url("../../bower_components/ng-dialog/css/ngDialog-theme-plain.min.css"); 
+@import url("../../bower_components/ng-dialog/css/ngDialog-theme-default.min.css"); 
+@import url("../../bower_components/ui-cropper/compile/unminified/ui-cropper.css");				
+@import url("../../bower_components/bootstrap/dist/css/bootstrap.css" );
+@import url("../../bower_components/bootstrap/dist/css/bootstrap-theme.min.css");
+@import url("../../bower_components/bootstrap-select/dist/css/bootstrap-select.min.css");
+@import url("../../bower_components/angular-ui-select/dist/select.css");
+@import url("../../bower_components/ng-spin/dist/ng-spin.css");
+@import url("bootstrap-social.css");
+@import url("page_style.css");
+@import url("parallax.css");

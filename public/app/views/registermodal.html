@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>		
+		<div class="modal-form-body row">
+			<div>
+				<div class="modal-header">
+					<div class="modal-header-text"> <translate>Register</translate> </div>
+				</div>
+				<div class="">&nbsp;</div>
+				<div>
+					<form data-toggle="validator" role="form" ng-submit="doRegister()">
+						<div class="col-md-10 col-md-offset-1 space-bottom10">
+							<div class="form-group"> 
+								<input type="text" class="form-control input-lg" id="username" for="username" placeholder="{{usernamePlaceholder}}" pattern=".{2,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Username must be 2 or more characters long.' : '');" ng-model="registration.username" required>
+							</div>
+							<div class="form-group"> 
+								<input type="text" class="form-control input-lg" id="email" for="email" placeholder="{{emailPlaceholder}}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-model="registration.email" required>
+							</div>
+							<div class="form-group"> 
+								<input type="text" class="form-control input-lg" id="fullname" for="fullname" placeholder="{{fullnamePlaceholder}}" ng-model="registration.fullname" required>
+							</div>							
+							<div class="form-group"> 
+								<input type="password" name="password" class="form-control input-lg" id="passwor" for="password" placeholder="{{passwordRPlaceholder}}" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.confirm.pattern = this.value;" ng-model="registration.password" required> 
+							</div>
+							<div class="form-group"> 
+								<input type="password" class="form-control input-lg" id="confirm" name="confirm" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password confirmation failed' : '');" placeholder="{{passwordRCPlaceholder}}" required>
+							</div>
+							<div class="col-md-8 col-md-offset-2 checkbox checkbox-place checkbox-background margin-bottom20">
+								<input type="checkbox" class="mid-checkbox" ng-model="registration.rememberMe"> 
+								<span class="checkbox-text"> <translate>Remember me</translate></span> 
+							</div>							 
+							<div class="col-md-8 col-md-offset-2 checkbox checkbox-place checkbox-background">
+								<input type="checkbox" class="mid-checkbox" onchange="document.getElementById('registerSubmit').disabled = !this.checked;"> 
+								<span class="checkbox-text"> <translate>I am human</translate></span> 
+							</div>
+						</div>
+						<div class="col-md-10 col-md-offset-1 modal-margin10">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group" role="group">
+									<button type="submit" id="registerSubmit" class="btn btn-lg  btn-success" disabled="disabled"><translate>Register</translate></button>
+								</div>
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-lg  btn-default" ng-click="closeThisDialog('Cancel')"><translate>Cancel</translate></button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>	

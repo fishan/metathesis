@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>
+		<content> 
+			<div class="container">		
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<div>
+							<div class="text-biggest text-center" translate>About project test</div>
+							<div class="text-mid text-center" ng-bind-html="about.text"></div>
+						</div>
+					</div>
+				</div>
+			</div>	 
+			<div class="container">
+				<div class="row">					
+					<hr>						
+				</div>
+			</div>	 
+			<div class="container">
+				<div class="row">					
+					<section class="parallax-1 text-center">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="panel panel-transparent-tips"> 
+								<div class="row row-content">
+									<div class="col-md-10 col-md-offset-1 height130">
+										<div ng-if="!showTips">
+											<div class="text-biggest text-center">{{message}}</div>
+										</div>
+										<div ng-if="showTips">
+											<div class="media-body media-body-tips">
+												<h2 class="media-heading">{{tip.title}} </h2>
+												<div class="text-small-plus">
+													{{tip.text}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>						 
+						</div>
+					</section>						
+				</div>
+			</div>	 
+			<div class="container">
+				<div class="row">					
+					<hr>						
+				</div>
+			</div>	 
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<button href="#make_proposal" type="button" class="btn btn-sm btn-block btn-text" id="proposalCollapse" data-toggle="collapse" onclick="document.getElementById('checkboxProposal').checked = false; document.getElementById('proposalSubmit').disabled = true;"><translate>Make proposal</translate></button>
+						<div id="make_proposal" class="collapse">															
+							<form role="form" name="proposalForm" ng-submit="submitProposal()"> 
+								<div class="form-group"> 
+									<h4> <input type="text" class="form-control" id="proposalTitle" name="title" placeholder="Proposal title" ng-model="proposal.title" required="required"></h4>
+									<textarea class="tinymce" ui-tinymce="tinymceOptionsMin" name="proposaltext" placeholder="Do proposal" ng-model="proposal.proposaltext"></textarea>							 
+								</div>
+								<div class="row">
+									<div class="col-md-8 col-md-offset-2">
+										<div class="col-md-6 checkbox-place">
+											<input type="checkbox" class="mid-checkbox" id="checkboxProposal" onchange="document.getElementById('proposalSubmit').disabled = !this.checked;" />
+											<span class="checkbox-text" translate> I am human</span>
+										</div>
+										<div class="col-md-6">
+											<button type="submit" id="proposalSubmit" class="btn btn-success btn-lg btn-block" disabled="disabled" translate>Submit</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>	
+				</div>		
+			</div>	 
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<hr>
+					</div>
+				</div>
+			</div>	 
+		
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div class="text-big text-center" translate>Proposals</div>
+						<div ng-if="!showProposal">
+							<div class="text-biggest text-center">{{message}}</div>
+						</div>
+						<div ng-if="showProposal">
+							
+							<div ng-if="proposals.length == 0" class="text-mid content-text-center" translate>
+								Sorry, but at the moment, there are no proposals.
+							</div>
+							<div ng-if="proposals.length != 0">								
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row space-bottom20">
+										<text-mid for="search" translate>Search:</text-mid>
+										<input ng-model="propsSearch" id="psearch" class="form-control" placeholder="{{filterTextPlaceholder}}">										
+									</div>	
+								</div>
+								<div class="col-md-10 col-md-offset-1">
+									<hr>
+								</div>
+								<div class="col-md-10 col-md-offset-1">
+									<div dir-paginate="proposal in proposals | filter:propsSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="propsList" current-page="currentPropsPage">	
+										<div class="media-body">
+											<div class="text-mid text-center">{{proposal.title}}</div>
+											<div class="text-small-plus text-center" ng-bind-html="proposal.proposaltext"></div>
+											<div class="text-small text-center">{{proposal.createdAt | date:'dd.MM.y HH:mm'}} </div>
+											<hr>
+										</div>
+									</div>
+								</div>
+								<div class="text-center">
+									<dir-pagination-controls pagination-id="propsList" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+									</dir-pagination-controls>
+								</div>								
+							</div>							
+						</div>						
+					</div>	
+				</div>		
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<hr>
+					</div>	
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">			
+						<button href="#make_complain" type="button" class="btn btn-sm btn-block btn-text" id="complainCollapse" data-toggle="collapse" onclick="document.getElementById('checkboxComplain').checked = false; document.getElementById('complainSubmit').disabled = true;"><translate>Make a complaint</translate></button>
+						<div id="make_complain" class="collapse">
+							<form role="form" name="complainForm" ng-submit="submitComplain()"> 
+								<div class="form-group"> 
+									<h4> <input type="text" class="form-control" id="complainTitle" name="title" placeholder="Complain title" ng-model="complain.title" ng-required="true"></h4>
+									<textarea class="tinymce" ui-tinymce="tinymceOptionsMin" name="complaintext" placeholder="Do complain" ng-model="complain.complaintext"></textarea>						 
+								</div>
+								<div class="row">
+									<div class="col-md-8 col-md-offset-2">
+										<div class="col-md-6 checkbox-place">
+											<input type="checkbox" class="mid-checkbox" id="checkboxComplain" onchange="document.getElementById('complainSubmit').disabled = !this.checked;" />
+											<span class="checkbox-text" translate> I am human</span>
+										</div>
+										<div class="col-md-6">
+											<button type="submit" id="complainSubmit" class="btn btn-success btn-lg btn-block" disabled="disabled" translate>Submit</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>	
+				</div>		
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<hr>
+					</div>	
+				</div>
+			</div>	 
+
+			<div class="container">
+				<div class="row">			
+					<div class="col-md-10 col-md-offset-1">
+						<div class="text-big text-center" translate>Complains</div>
+						<div ng-if="!showProposal">
+							<h3 class="media-heading">{{message}}</h3>
+						</div>
+						<div ng-if="showProposal">
+							
+							<div ng-if="complains.length == 0" class="text-mid content-text-center" translate>
+								Sorry, but at the moment, there are no complains.
+							</div>
+							<div ng-if="complains.length != 0">								
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row space-bottom20">
+										<text-mid for="search" translate>Search:</text-mid>
+										<input ng-model="compsSearch" id="csearch" class="form-control" placeholder="{{filterTextPlaceholder}}">										
+									</div>	
+								</div>
+								<div class="col-md-10 col-md-offset-1">
+									<hr>
+								</div>
+								<div class="col-md-10 col-md-offset-1">
+									<div dir-paginate="complain in complains | filter:compsSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="compsList" current-page="currentCompsPage">										
+										<div class="media-body">
+											<div class="text-mid text-center">{{complain.title}}</div>
+											<div class="text-small-plus text-center" ng-bind-html="complain.complaintext"></div>
+											<div class="text-small text-center">{{complain.createdAt | date:'dd.MM.y HH:mm'}} </div>
+											<hr>
+										</div>
+									</div>								
+								</div>
+								<div class="text-center">
+									<dir-pagination-controls pagination-id="compsList" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+									</dir-pagination-controls>
+								</div>								
+							</div>							
+						</div>
+					</div>	
+				</div>		
+			</div>
+
+			
+		</content>
+	</body>
+</html>

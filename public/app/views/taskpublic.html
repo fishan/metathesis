@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="Task Private" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>
+		<content>
+			<div ng-if="!showTask">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">							
+							<div class="text-biggest text-center">{{message}}</div>							
+						</div>
+					</div>
+				</div>		 
+			</div>
+			<div ng-if="showTask">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">							
+							<div class="text-biggest text-center" translate>Task Public Page</div>							
+						</div>						
+					</div>					
+				</div>
+				<div class="container">
+					<div class="row">						
+						<div class="col-md-10 col-md-offset-1">
+							<div class="row">
+								<div ng-show ="task.status[0].id == 1" class="col-md-12 space-bottom10">
+									<div class="col-md-6 text-center float-left">
+										<h2><translate>Task status:</translate><span class="text-big text-shadow" ng-style = "{'color': task.status[0].color}"> {{task.status[0].title | translate}}</span></h2>
+									</div>
+									<div class="col-md-6 text-center">
+										<div ng-show="candidateExist() == true">
+											<h2><translate>Your status in task is:</translate> <span class="text-shadow text-padding10" ng-style = "{'color': setStyle(candidateStatus())}">{{candidateStatus() | translate}}</span></h2>
+										</div>										
+										<div class="btn-group btn-group-justified space10" role="group" ng-show="candidateExist() == false && task.status[0].title == 'OPEN'">
+											<div class="btn-group" role="group">
+												<button type="button" class="btn btn-lg btn-success" href="#make_statement" id="statementCollapse" data-toggle="collapse"><translate>I'm in!</translate></button>
+											</div>											
+											<div class="btn-group" role="group">
+												<button type="button" class="btn btn-lg btn-danger" ng-click="cancelCandidate()"><translate>Not interested</translate></button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div ng-show="candidateExist() == false && task.status[0].title == 'OPEN'">
+									<div id="make_statement" class="collapse">
+										<h2><translate>Statement text:</translate></h2>
+										<h4 translate>(Motivate to your advantage)</h4>
+										<form role="form" name="statementForm" ng-submit="submitCandidate()"> 
+											<div class="form-group space10"> 
+												<textarea class="tinymce" ui-tinymce="tinymceOptionsMin" name="statementtext" placeholder="Do statement" ng-model="candidate.statement"></textarea>							 
+											</div>
+											<div class="row">											
+												<div class="col-md-6 col-md-offset-3">												
+													<div class="btn-group btn-group-justified">
+														<div class="btn-group">
+															<button type="button" ng-click="submitCandidate()" id="statementSubmit" type="submit" class="btn btn-lg btn-success" translate>Apply</button>
+														</div>
+														<div class="btn-group">
+															<button type="button" class="btn btn-lg btn-danger" href="#make_statement" data-toggle="collapse" translate>Cancel</button>
+														</div>		
+													</div>													
+												</div>											
+											</div>
+										</form>
+									</div>
+								</div>
+								<div ng-show ="task.status[0].id != 1" class="col-md-12 space-bottom10">
+									<div class="col-md-6 text-center">
+										<h2><translate>Task status:</translate>
+										<span class="text-big text-shadow text-padding10" ng-style = "{'color': task.status[0].color}"> {{task.status[0].title | translate}}</span>	
+										</h2>
+									</div>
+									<div class="col-md-6 text-center">
+										<div ng-show="candidateExist() == true">
+											<h2><translate>Your status in task is:</translate> {{candidateStatus() | translate}}</h2>
+										</div>
+									</div>
+								</div>
+								<div ng-if="task.status[0].text.length > 0">
+									<div class="col-md-12 space-bottom20">
+										<text-big translate>Status description</text-big>
+										<div class="text-mid text-center" ng-bind-html="task.status[0].text" ></div>
+									</div>
+								
+								</div>
+							</div>
+							<hr>
+							
+							<div ng-show="candidateExist() == true && reply != ''">
+								<div class="row">
+									<div class="text-biggest text-center space-bottom20" for="taskCategory" translate>Customer response</div>
+									<div class="text-mid text-center" ng-bind-html="reply" ></div>
+								</div>
+								<hr>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="text-big text-padding10 space-bottom20" for="taskCategory" translate>Posted by</div>
+								</div>
+								<div class="col-md-12">
+									<div class="col-md-3">
+										<a ui-sref="app.profilepublic({id: task.postedBy._id})">
+											<img check-avatar class="profile-image center-div img-thumbnail space-bottom10" ng-src="{{task.postedBy.image}}" >
+										</a>
+									</div>
+									<div class="col-md-9 nopadding">										
+										<table class="table100">
+											<col style="width:40%">									 
+											<tr>
+												<td class="text-right">
+													<text-mid translate>Full name:</text-mid>
+												</td>
+												<td class="text-padding10">
+													<a ui-sref="app.profilepublic({id: task.postedBy._id})">
+														<text-mid>{{task.postedBy.fullname}}</text-mid>
+													</a>	
+												</td>
+											</tr>
+									
+											<tr>
+												<td class="text-right">
+													<text-mid translate>Familiar languages:</text-mid>
+												</td>
+												<td class="text-padding10">										
+													<span class="text-mid" ng-repeat="unit in task.postedBy.morelang" value="{{unit.code}}">
+													{{unit.name}} </span>	
+												</td>
+											</tr>
+											<tr>
+												<td class="text-right">
+													<text-mid translate>Registered:</text-mid>
+												</td>
+												<td class="text-padding10">
+													<text-mid>{{task.postedBy.createdAt | date:'dd.MM.y HH:mm'}}</text-mid>
+												</td>
+											</tr>
+											<tr>
+												<td class="text-right">
+													<text-mid translate>Completed tasks:</text-mid>
+												</td>
+												<td class="text-padding10">
+													<text-mid>{{task.postedBy.completed}}</text-mid>
+												</td>
+											</tr>
+											<tr>
+												<td class="text-right">
+													<text-mid translate>Published tasks:</text-mid>
+												</td>
+												<td class="text-padding10">
+													<text-mid>{{task.postedBy.published}}</text-mid>
+												</td>
+											</tr>
+											<tr>
+												<td class="text-right">
+													<text-mid><translate>User rating per</translate> {{task.postedBy.ratingCount}} <translate>votes</translate>:</text-mid>
+												</td>
+												<td class="text-padding10">
+													<span><jk-rating-stars rating="userRating()" max-rating="10" read-only="true" ></jk-rating-stars></span>  
+												</td>												
+											</tr>										 
+											<tr>
+												<td class="text-right">
+													<text-mid translate>Task posted:</text-mid>
+												</td>
+												<td class="text-padding10">
+													<text-mid>{{task.createdAt | date:'dd.MM.y HH:mm'}}</text-mid>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>								
+							</div>	
+							<hr>							
+							<div class="row">
+								<div class="col-md-12">
+									<div class="text-big text-padding10 space-bottom20" for="taskCategory" translate>Category</div>
+									<div class="text-biggest text-center" ng-style = "{'background': task.category[0].color,'color': task.category[0].fontcolor}">{{task.category[0].name | translate}}</div>									
+								</div>
+							</div>	
+							<hr>
+							<div ng-if="images[0]">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="text-big text-padding10 space-bottom20" for="taskCategory" translate>Images</div>
+										<div class="center90 lgallery ">
+											<ul id="lightgallery" class="list-unstyled row">
+												<li lightgallery ng-repeat="image in images" data-src="{{image.lg}}">
+													<a href="">
+														<img class="img-responsive" ng-src="{{image.thumb}}" />
+													</a>
+												</li>
+											</ul>
+										</div>							
+									</div>
+								</div>	
+								<hr>
+							</div>
+							<div ng-if="task.langs.length > 1">
+								<div class="row">								
+									<div class="col-md-12 checkbox-place space-bottom20">									
+										<input type="checkbox" class="mid-checkbox" ng-model="accordion.oneAtATime"/>
+											<span class="checkbox-text"><translate> Open only one language panel.</translate></span>	
+									</div>	
+								</div>
+							</div>	
+							<uib-accordion close-others="accordion.oneAtATime">									
+								<div uib-accordion-group ng-class="btn-text" ng-init="isOpen=taskLangsOpen" is-open="$first" class="accordion-style" ng-click="isopen=!isopen" ng-repeat="langs in task.langs">
+									<div uib-accordion-heading ng-click="isopen=!isopen">
+										{{langs.lang.nativeName}}
+									</div>
+									<text-big class="text-padding10" translate>Title</text-big>											
+									<h3 id="taskTitle">{{langs.title}}</h3>
+									<hr>
+									<div class="">
+										<text-big class="text-padding10" translate>Key words and phrases</text-big>
+										<h3><span class="text-mid" ng-repeat="word in langs.tags">{{word}} </span></h3>
+									</div>
+									<hr>									
+									<div class="">
+										<text-big class="text-padding10" translate>Description</text-big>
+										<h3 ng-bind-html="langs.description"></h3>	
+									</div>
+									<hr>
+									<div class="">
+										<text-big class="text-padding10" translate>Conditions</text-big>
+										<h3 ng-bind-html="langs.conditions"></h3>
+									</div>
+									<hr>
+									<div class="">
+										<text-big class="text-padding10" translate>Reward</text-big>
+										<h3>{{langs.reward}}</h3>
+									</div>	
+								</div>
+							</uib-accordion>	
+							<div ng-if="task.showaddress">
+								<hr>											
+								<div class="text-big text-padding10 space-bottom20" translate>Address</div>
+								<h3 class="text-padding10">{{task.address}}</h3>										
+							</div>								
+							<hr>
+							<div class="space20"></div>							
+							<div class="text-big text-padding10 space-bottom20" translate>Task events on the map</div>
+							<div ng-if = "task.range > 0 " >								
+								<h3 class="text-padding10" translate>Range area description</h3>
+								<h3 class="text-padding10"> {{task.areadesc}}</h3>
+							</div>
+							<div class="space20"></div>
+							<ng-map class="gmap" center="{{taskLocation.position}}"  default-style="false">
+								<marker position="{{taskLocation.position}}" icon="{
+									url: '{{markerIcon}}',
+									scaledSize:[60,35],
+									origin: [0,0],
+									anchor: [30,35]
+								  }">
+								</marker>
+								<shape name="circle" no-watcher="true" stroke-color="#000" stroke-opacity="0.3" stroke-weight="1" fill-color={{cirleColor}} fill-opacity="0.15" center="{{taskLocation.position}}" radius="{{task.range}}"></shape>
+							</ng-map>
+							<hr>
+							<div ng-show = "task.status[0].id != 3">
+								<button href="#make_question" type="button" class="btn btn-sm btn-block btn-text" id="questionCollapse" data-toggle="collapse" translate>Ask a question</button>
+								<div id="make_question" class="collapse">
+									<form role="form" name="questionForm" ng-submit="submitQuestion()"> 
+										<div class="form-group"> 
+											<h4> <input type="text" class="form-control" id="questionTitle" name="title" placeholder="Question title" ng-model="question.title" required="required"></h4>
+											<textarea class="tinymce" ui-tinymce="tinymceOptionsMin" name="questiontext" placeholder="Do question" ng-model="question.text"></textarea>							 
+										</div>
+										<div class="row">
+											<div class="col-md-6 col-md-offset-3">														
+												<div class="btn-group btn-group-justified">
+													<div class="btn-group">
+														<button type="button" ng-click="submitQuestion()" id="questionSubmit" type="submit" class="btn btn-lg btn-success" translate>Submit</button>
+													</div>	
+													<div class="btn-group">	
+														<button type="button" class="btn btn-lg btn-danger" href="#make_question" data-toggle="collapse" translate>Cancel</button>
+													</div>
+												</div>													
+											</div>
+										</div>
+									</form>								
+								</div>
+							</div>
+							
+							
+							<div class="row row-content">			
+								<div class="col-md-12">
+									<div class="text-big text-center space10" translate>Questions and Answers</div>
+									<div ng-if="!showQuestions">
+										<h3 class="text-biggest text-center">{{message}}</h3>
+									</div>
+									<div ng-if="showQuestions">
+										
+										<div ng-if="task.questions.length == 0" class="text-mid content-text-center space10" translate>
+											No questions on the task!
+										</div>
+										<div ng-if="task.questions.length != 0">											
+											<div class="row space-bottom10">
+												<div class="col-md-10 col-md-offset-1">
+													<text-mid for="search" translate>Search:</text-mid>
+													<input ng-model="questionSearch" id="qsearch" class="form-control" placeholder="{{filterTextPlaceholder}}">
+												</div>										
+											</div>											
+											<hr>
+											<div class="col-md-12">
+												<div dir-paginate="question in task.questions | filter:questionSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="questionList" current-page="currentQPage">										
+													<div class="media-body space-bottom10">
+														<div ng-if="question">														
+															<div  class="relative">
+																<div class="media-left media-top">
+																	<a ui-sref="app.profilepublic({id: question.postedBy._id, '#': 'mainNavbar'})">
+																		<img check-avatar ng-src="{{question.avatar}}" class="media-object avatar100 img-thumbnail">
+																	</a>
+																</div>
+																<div class="media-body">
+																	<div  class="text-mid headerstat"><translate>Question</translate> {{question.id}}, <translate>Posted by:</translate> <a ui-sref="app.profilepublic({id: question.postedBy._id, '#': 'mainNavbar'})">{{question.postedBy.fullname}}</a>, {{question.createdAt | date:'dd.MM.y HH:mm'}}</div>
+																	<div class="text-center text-big">{{question.title}}</div>
+																	<div class="text-mid content-text-center space-bottom20" ng-bind-html="question.text"></div>
+																</div>
+															</div>
+														</div>	
+														<div ng-if="question.answer[0].text.length > 0" class="col-md-12 backlightgray space10">
+															<div class="col-md-2 ">
+																<div class="text-mid text-center pspace-left20 qamid" translate>Answer</div>
+															</div>
+															<div class="col-md-10">
+																<div class="relative">
+																	<div class="media-left media-top">
+																		<a ui-sref="app.profilepublic({id: task.postedBy._id, '#': 'mainNavbar'})">
+																			<img check-avatar ng-src="{{task.postedBy.image}}" class="media-object avatar100 img-thumbnail">
+																		</a>
+																	</div>
+																	<div class="media-body">																
+																		<div class="text-mid text-center space20" ng-bind-html="question.answer[0].text"></div>
+																	</div>
+																</div>
+															</div>													
+														</div>
+													</div>
+													<hr>
+												</div>
+											</div>	
+											<div class="text-center">
+												<dir-pagination-controls pagination-id="questionList" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+												</dir-pagination-controls>
+											</div>								
+										</div>							
+									</div>
+								</div>	
+							</div>
+							<hr>
+							<div ng-show = "task.status[0].id != 3">
+								<button href="#make_comment" type="button" class="btn btn-sm btn-block btn-text" id="commentCollapse" data-toggle="collapse" translate>Leave a comment</button>
+								<div id="make_comment" class="collapse">									
+									<form role="form" name="commentForm" ng-submit="submitComment()"> 
+										<div class="form-group space10"> 
+											<textarea class="tinymce" ui-tinymce="tinymceOptionsMin" name="commenttext" placeholder="Do comment" ng-model="comment.text"></textarea>							 
+										</div>
+										<div class="row">											
+											<div class="col-md-6 col-md-offset-3">												
+												<div class="btn-group btn-group-justified">
+													<div class="btn-group">
+														<button type="button" ng-click="submitComment()" id="commentSubmit" type="submit" class="btn btn-lg btn-success" translate>Submit</button>
+													</div>
+													<div class="btn-group">
+														<button type="button" class="btn btn-lg btn-danger" href="#make_comment" data-toggle="collapse" translate>Cancel</button>
+													</div>		
+												</div>													
+											</div>											
+										</div>
+									</form>
+								</div>
+							</div>
+							
+							<div class="row row-content">			
+								<div class="col-md-12">
+									<div class="text-big text-center space10" translate>Task Comments</div>
+									<div ng-if="!showComments">
+										<h3 class="media-heading">{{message}}</h3>
+									</div>
+									<div ng-if="showComments">
+										
+										<div ng-if="task.comments.length == 0" class="text-mid content-text-center space10" translate>
+											No any comments yet!
+										</div>
+										<div ng-if="task.comments.length != 0">
+											<div class="col-md-10 col-md-offset-1">
+												<div class="row">
+													<text-mid for="search" translate>Search:</text-mid>
+													<input ng-model="commentSearch" id="csearch" class="form-control" placeholder="{{filterTextPlaceholder}}">
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="row">
+													<hr>
+												</div>	
+											</div>
+											<div class="col-md-12">
+												<div dir-paginate="comment in task.comments | filter:commentSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="commentList" current-page="currentCPage">										
+													<div class="media-body">
+														<div class="relative">
+															<div class="media-left media-top">
+																<a ui-sref="app.profilepublic({id: comment.postedBy._id, '#': 'mainNavbar'})">
+																	<img check-avatar ng-src="{{comment.avatar}}" class="media-object avatar100 img-thumbnail">
+																</a>
+															</div>
+															<div class="media-body">
+																<div  class="text-mid headerstat"><translate>Posted by:</translate> <a ui-sref="app.profilepublic({id: comment.postedBy._id, '#': 'mainNavbar'})">{{comment.postedBy.fullname}}</a>, {{comment.createdAt | date:'dd.MM.y HH:mm'}}</div>
+																<div class="text-mid content-text-center space-bottom20" ng-bind-html="comment.text"></div>
+															</div>
+														</div>
+														<hr>
+													</div>
+												</div>
+											</div>	
+											<div class="text-center">
+												<dir-pagination-controls pagination-id="commentList" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+												</dir-pagination-controls>
+											</div>								
+										</div>							
+									</div>
+								</div>	
+							</div>		
+								 
+						</div>
+					</div>
+				</div>
+			</div>		
+		</content>
+	</body>
+</html>

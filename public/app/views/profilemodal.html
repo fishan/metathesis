@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="Task Private" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>		
+		<div class="modal-form-body row">
+			<div>
+				<div class="modal-header">
+					<div class="modal-header-text"> <translate>Profile Image</translate> </div>
+				</div>
+				<div>
+					<form name="profileImage">
+						<div class="space10 col-md-10 col-md-offset-1">
+								
+								<input type="file" id="fileInput" ngf-select ng-model="picFile" name="file" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="1MB" style="display: none;"/>
+								<input type="button" class="btn btn-metathesis btn-block space-bottom0" value="{{browsePhotoPlaceholder}}" onclick="document.getElementById('fileInput').click();" />
+								
+								<div class="height0">
+									<text-mid class="content-text-back content-text-center" ng-show="profileImage.file.$error.required"><translate>* required</translate></text-mid><br>
+									<text-mid class="content-text-back content-text-center" ng-show="profileImage.file.$error.maxSize"><translate>File too large, max 1Mb</translate></text-mid>
+								</div>
+								<div class="space10">			
+									<div ngf-drop ng-model="picFile" ngf-pattern="image/*"
+									 class="cropArea">
+										<ui-cropper image="picFile" area-type="square" area-min-size='75' result-image-quality="100" result-image="croppedImage">
+										</ui-cropper>
+									</div>
+								</div>
+								<div class="space10 fixeddiv30">
+									<div ng-show="showTitleResult" class="content-text-center content-text-back fixeddiv30 text-mid">
+										<translate>Result</translate>
+									</div>
+									<div ng-show="!showTitleResult">
+										<div role="progressbar" class="progress-bar  progress-bar-striped" style="width:{{progress}}%; height: 30px;" ng-bind="progress + '%'">
+										</div>
+										
+									</div>
+								</div>
+								<div class="space10">									
+									<img class="croppedImg" ng-src="{{croppedImage}}" />
+								</div>
+						</div>
+						<div class="space10 col-md-10 col-md-offset-1 modal-margin10">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group" role="group">
+									<button type="submit" ng-click="submitImage()" class="btn  btn-lg btn-success" translate>Submit</button>
+								</div>
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-lg btn-default" ng-click="closeThisDialog('Cancel')" translate>Cancel</button>
+								</div>
+							</div>
+						</div>						
+					</form>			
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body>
+		<content>
+			<div ng-if="!showProfile">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="col-md-10 col-md-offset-1"> 
+								<div class="text-biggest text-center">{{message}}</div>
+							</div>
+						</div>
+					</div>
+				</div>		 
+			</div>
+			<div ng-if="showProfile">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1">							
+							<div class="text-biggest text-center">
+								<translate>Public profile</translate> {{profilePublic.fullname}}
+							</div>
+
+						</div>
+					</div>
+				</div>					
+				<div class="container">				
+					<div class="col-md-10 col-md-offset-1">
+						<hr>
+						<div class="col-md-3">							
+							<img check-avatar class="profile-image center-div img-thumbnail space-bottom10" ng-src="{{imageAvatar}}">
+						</div>
+						<div class="col-md-9 nopadding">
+							<div class="media-body">
+								<table class="table100">
+									<col class="w40">
+									 
+									<tr>
+										<td class="text-right">
+											<text-mid translate>Full name:</text-mid>
+										</td>
+										<td class="text-padding10">
+											<text-mid>{{profilePublic.fullname}}</text-mid>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="text-right">
+											<text-mid translate>Familiar languages:</text-mid>
+										</td>
+										<td class="text-padding10">										
+											<span class="text-mid" ng-repeat="unit in profilePublic.morelang" value="{{unit.code}}">
+											{{unit.name}} </span>	
+										</td>
+									</tr>
+									<tr>
+										<td class="text-right">
+											<text-mid translate>Registered:</text-mid>
+										</td>
+										<td class="text-padding10">
+											<text-mid>{{profilePublic.createdAt | date:'dd.MM.y HH:mm'}}</text-mid>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-right">
+											<text-mid translate>Completed tasks:</text-mid>
+										</td>
+										<td class="text-padding10">
+											<text-mid>{{completed}}</text-mid>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-right">
+											<text-mid translate>Published tasks:</text-mid>
+										</td>
+										<td class="text-padding10">
+											<text-mid>{{published}}</text-mid>
+										</td>
+									</tr>
+									<tr>
+										<tr>
+											<td class="text-right">
+												<text-mid><translate>Rating per</translate> {{profilePublic.ratingCount}} <translate>votes</translate>:</text-mid>
+											</td>
+											<td class="text-padding10">
+												<span><jk-rating-stars rating="userRating()" max-rating="10" read-only="true" ></jk-rating-stars></span>  
+											</td>
+										</tr>
+									</tr>										 
+										 
+								</table>									 
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="row"> 
+								<hr>
+							</div>
+							<div class="text-big content-text-center">
+								<translate>About</translate> {{profilePublic.fullname}} 								
+							</div>
+							<div class="text-mid content-text-center" ng-bind-html="info">
+								 								
+							</div>
+							<div class="row"> 
+								<hr>
+							</div>
+							<div class="text-big content-text-center" translate>
+								Skills and abilities 								
+							</div>
+							<div class="text-mid content-text-center" ng-bind-html="skills">
+																
+							</div>
+							<div class="row"> 
+								<hr>
+							</div>
+						</div>	
+					</div>		
+				</div>			
+				<div class="container">
+					<div class="row">			
+						<div class="col-md-10 col-md-offset-1">
+							<div class="col-md-2 ">
+								<div class="col-md-6 space-bottom20">
+									<a class="btn btn-md btn-metathesis" role="button" ng-click="viewPTaskList = false"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></a>
+								</div>	
+								<div class="col-md-6">
+									<a class="btn btn-md btn-metathesis" role="button" ng-click="viewPTaskList = true"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></a>
+								</div>
+							</div>
+							<div class="col-md-8 text-big content-text-center" translate>Portfolio of completed tasks</div>
+							<div class="col-md-2 ">
+								
+							</div>
+						</div>	
+					</div>		
+				</div>			
+				<div class="container">
+					<div class="row">			
+						<div class="col-md-10 col-md-offset-1">
+							<div ng-if="!showPortfolioTasks">
+								<h3 class="media-heading">{{message}}</h3>
+							</div>
+							<div ng-if="showPortfolioTasks">
+								
+								<div ng-if="portfolio.length == 0" class="text-mid content-text-center" translate>
+									User do not have completed tasks yet.
+								</div>
+								<div ng-if="portfolio.length != 0">	
+									<div class="col-md-9 col-md-12">
+										<div class="row space-bottom10">													
+											<div class="col-md-12">
+												<text-mid for="search" translate>Search:</text-mid>
+												<input ng-model="pSearch" id="search" class="form-control" placeholder="{{filterTextPlaceholder}}">
+											</div>
+										</div>	
+									</div>
+									<div ng-if="viewPTaskList == false">	
+										<div class="col-md-3 col-md-12">
+											<div class="row space-bottom10">		
+												<div class="col-md-12">
+													<text-mid for="search" translate>Cards per page:</text-mid>
+													<input type="number" min="3" max="30" class="form-control" ng-model="pageSizeRow" step="3">
+												</div>
+											</div>	
+										</div>
+										<div class="col-md-12">
+											<div dir-paginate="task in portfolio | filter:pSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeRow" pagination-id="userPTasksRow" current-page="currentPageRow">
+												<div class="col-md-4 col-md-6">
+													<div class="thumbnail space20 taskCard">
+														<div class="media-body">																					
+															<div class="text-mid content-text-center"><a ui-sref="app.taskpublic({id: task.taskBy._id, '#': 'mainNavbar'})" ng-bind-html="titleCCard = task.taskBy.langs[0].title.substring(0,29)"></a></div>
+															<div class="text-big text-center" ng-style = "{'background': task.taskBy.category[0].color,'color': task.taskBy.category[0].fontcolor}">{{task.taskBy.category[0].name | translate}}</div>
+															<a ui-sref="app.taskpublic({id: task.taskBy._id, '#': 'mainNavbar'})">
+																<div ng-if="task.taskBy.images[0]">
+																	<img class="img-responsive img-thumbnail" ng-src="{{task.taskBy.images[0]}}" >
+																</div>
+																<div ng-if="!task.taskBy.images[0]">
+																	<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+																</div>
+															</a>
+															
+															<table class="tasktumbs-footer">
+																<text-small-plus class="vertical-center">{{task.taskBy.langs[0].shortdescription}}</text-small-plus>
+																
+																<tr>
+																	<td class="text-right">
+																		<text-small translate>Published:</text-small>
+																	</td>
+																	<td class="text-padding10">
+																		<text-small>{{task.taskBy.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																	</td>
+																</tr>
+																<tr>
+																	<td class="text-right">
+																		<text-small translate>Completed:</text-small>
+																	</td>
+																	<td class="text-padding10">
+																		<text-small>{{task.taskBy.updatedAt | date:'dd.MM.y HH:mm'}}</text-small>
+																	</td>
+																</tr>
+															</table>						
+														</div>
+													</div>
+												</div>
+											</div>
+										
+										</div>
+										<div class="text-center">
+											<dir-pagination-controls pagination-id="userPTasksRow" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" >
+											</dir-pagination-controls>
+										</div>
+											
+									</div>
+
+									<div ng-if="viewPTaskList == true">
+										<div class="col-md-3 col-md-12">
+											<div class="row space-bottom20">		
+												<div class="col-md-12">
+													<text-mid for="search" translate>Items per page:</text-mid>
+													<input type="number" min="1" max="30" class="form-control" ng-model="pageSizeList">
+												</div>											
+											</div>	
+										</div>
+										
+										<div class="col-md-12">
+										
+											<ul class="media-list"> 
+												<li class="media" dir-paginate="task in portfolio | filter:cSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeList" pagination-id="userPTasksList" current-page="currentPageList">
+													
+													<div class="media-body">
+														<div class="col-md-4">															
+															<a ui-sref="app.taskpublic({id: task.taskBy._id})">
+																<div ng-if="task.taskBy.images[0]">
+																	<img class="vertical-center img-responsive img-thumbnail" ng-src="{{task.taskBy.images[0]}}.thumb-card.jpg" >
+																</div>
+																<div ng-if="!task.taskBy.images[0]">
+																	<img class="vertical-center img-responsive img-thumbnail" ng-src="./images/icons/dummy_task.jpg" >
+																</div>
+															</a>
+															
+														</div>
+														<div class="col-md-8 nodecore taskRow">
+															<a class="nodecore" ui-sref="app.taskpublic({id: task.taskBy._id})">
+																<div class="text-big text-center" ng-style = "{'background': task.taskBy.category[0].color,'color': task.taskBy.category[0].fontcolor}">{{task.taskBy.category[0].name | translate}}</div>
+																<div class="text-mid content-text-center" ng-bind-html="titleCRow = task.taskBy.langs[0].title.substring(0,85)"></div>
+																<div class="">
+																	<table class="tasklist-footer">
+																		<text-small-plus class="vertical-center">{{task.langs[0].shortdescription}}</text-small-plus>
+																		<tr>
+																			<td class="text-right">
+																				<text-small translate>Published:</text-small>
+																			</td>
+																			<td class="text-padding10">
+																				<text-small>{{task.taskBy.createdAt | date:'dd.MM.y HH:mm'}}</text-small>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="text-right">
+																				<text-small translate>Completed:</text-small>
+																			</td>
+																			<td class="text-padding10">
+																				<text-small>{{task.taskBy.updatedAt | date:'dd.MM.y HH:mm'}}</text-small>
+																			</td>
+																		</tr>														 
+																	</table>
+																</div>
+															</a>
+														</div>
+													</div>
+														
+												</li>
+											</ul>
+										</div>
+										<div class="text-center">
+											<dir-pagination-controls pagination-id="userPTasksList" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+											</dir-pagination-controls>
+										</div>
+									</div>
+									
+								</div>
+								
+							</div>
+						</div>	
+					</div>		
+				</div>
+
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<hr>
+						</div>
+					</div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">							
+							<div class="text-big content-text-center" translate>
+								Profile comments 								
+							</div>
+							<div ng-if="!showComments">
+								<h3 class="media-heading">{{message}}</h3>
+							</div>
+							<div ng-if="showComments">
+								<div ng-if="profilePublic.comments.length == 0" class="text-mid content-text-center" translate>
+									There are no comments for your profile.
+								</div>
+								<div ng-if="profilePublic.comments.length != 0">								
+									<div class="col-md-10 col-md-offset-1">
+										<div class="row space-bottom20">
+											<text-mid for="search" translate>Search:</text-mid>
+											<input ng-model="comSearch" id="csearch" class="form-control" placeholder="{{filterTextPlaceholder}}">										
+										</div>	
+									</div>
+									<div class="col-md-12">
+										<hr>
+									</div>
+									<div class="col-md-12">
+										<div dir-paginate="comment in profilePublic.comments | filter:comSearch | orderBy: '-createdAt'| itemsPerPage: pageSizeList" pagination-id="comList" current-page="currentComPage">										
+											<div class="media-body">
+												<div class="col-md-12">
+													<div class="col-md-2">
+														<a ui-sref="app.profilepublic({id: comment.postedBy._id, '#': 'mainNavbar'})">
+															<img class="media-object img-thumbnail" ng-src="{{comment.postedBy.image}}">
+														</a>
+													</div>
+													<div class="col-md-10">
+														<div class="text-center">
+															<a ui-sref="app.profilepublic({id: comment.postedBy._id, '#': 'mainNavbar'})">
+																<span class="text-mid">{{comment.postedBy.fullname}} </span>
+															</a> <span class="text-small-plus">Posted: {{comment.createdAt | date:'dd.MM.y HH:mm'}}</span>
+														</div>	
+														<table>
+															<tr>
+																<td class="text-right">
+																	<div class="text-mid" translate>Task:</div>
+																</td>
+																<td class="text-padding10">
+																	<a ui-sref="app.taskpublic({id: comment.taskBy._id, '#': 'mainNavbar'})">
+																		<div class="text-mid">{{comment.taskBy.langs[0].title}}</div>
+																	</a>
+																</td>
+															</tr>
+															<tr>
+																<td class="text-right">
+																	<div class="text-mid" translate>Rating:</div>
+																</td>
+																<td class="text-padding10">
+																	<jk-rating-stars rating="comment.rating" max-rating="10" read-only="true" ></jk-rating-stars>
+																</td>
+															</tr>														 
+															<tr>
+																<td class="text-right">
+																	<div class="text-mid" translate>Comment:</div>
+																</td>
+																<td class="text-padding10">
+																	<div class="text-mid" ng-bind-html="comment.comment"></div>
+																</td>
+															</tr>														 
+														</table>
+														<div class="text-small-plus text-center"> </div>
+													</div>
+													<div class="col-md-12">
+														<hr>
+													</div>	
+												</div>												
+											</div>
+										</div>								
+									</div>
+									<div class="text-center">
+										<dir-pagination-controls pagination-id="comList" class="center-div" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)">
+										</dir-pagination-controls>
+									</div>								
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</content>		 
+	</body>
+</html>

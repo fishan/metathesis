@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Metathesis</title>
+	</head>
+	<body> 
+		<content>
+			<div ng-if="!showEditTask">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">							
+							<h3 class="text-biggest text-center">{{message}}</text-big>							
+						</div>
+					</div>
+				</div>		 
+			</div>
+			<div ng-if="showEditTask">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">							
+							<div class="text-biggest text-center" translate>Edit Task</div>
+						</div>						
+					</div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<hr>
+						</div>
+					</div>
+				</div>				
+				<div class="container">
+					<div class="row">						
+						<div class="col-md-10 col-md-offset-1">							
+							<form role="form" name="editTaskForm" ng-submit="submitTask()">								
+								<div class="form-group">
+									<text-big class="text-padding10" for="taskCategory" translate>Category</text-big>
+									<div class="text-biggest text-center" ng-style = "{'background': taskEdit.category[0].color,'color': taskEdit.category[0].fontcolor}">{{taskEdit.category[0].name | translate}}</div>
+								</div>
+								<hr>
+								<div class="text-biggest text-center" translate>Edit Language of the Task</div>
+								<h4 translate>(Edit or add more languages of the task)</h4>
+								<uib-accordion close-others="accordion.oneAtATime">									
+									<div uib-accordion-group ng-init="group.isOpen=false" is-open="group.isOpen" class="accordion-style" heading="{{langs.lang.nativeName}}" ng-repeat="langs in taskEdit.langs">
+										
+										<button class="btn btn-lg btn-danger pull-right" type="button" ng-click="deleteLang(langs.langId)" translate>Remove Task Language</button>
+										<div class="form-group">
+											<text-big class="text-padding10" for="taskTitle" translate>Title</text-big>
+											<h4 translate>(Specify a name for the task)</h4>
+											<input type="text" class="form-control" id="taskTitle" placeholder="{{tasktitle}}" name="title" ng-model="langs.title">
+										</div>
+										<hr>
+										<div class="form-group">
+											<text-big class="text-padding10" for="taskTags" translate>Key words and phrases</text-big>
+											<h4 translate>(Add the keywords or phrases of your task that will help in the solution. Describe the entire meaning of the task in separate words or short phrases. To edit a word or phrase in tags collection, write it in field and press Enter button.)</h4>
+												
+											<ui-select theme="bootstrap" multiple tagging tagging-label="false" ng-model="langs.tags" sortable="true">
+												<ui-select-match placeholder="{{keywordsplaceholder}}">{{$item}}</ui-select-match>
+												<ui-select-choices repeat="tag in tags | filter:$select.search">
+													{{tag}}
+												</ui-select-choices>
+											</ui-select>
+										</div>
+										<hr>
+										
+										<div class="form-group">
+											<text-big class="text-padding10" for="taskDescription" translate>Description</text-big>
+											<h4 translate>(Describe what you want to be done, ultimately.)</h4>										
+											<textarea ui-tinymce="tinymceOptionsMid" placeholder="{{descriptionplaceholder}}" name="description" ng-model="langs.description"></textarea>												
+										</div>
+										<hr>
+										<div class="form-group">
+											<text-big class="text-padding10" for="taskDescription" translate>Short description</text-big>
+											<h4 translate>(A brief description of the task, which will be visible in the lists.)</h4>									
+											
+											<textarea name="shortdescription" ng-model="langs.shortdescription" style="display:none;"></textarea>
+											<text-mid ng-bind-html="langs.shortdescription = langs.description.substring(3,150)"></text-mid>
+										</div>
+										<hr>
+										
+										<div class="form-group">
+											<text-big class="text-padding10" for="taskConditions" translate>Conditions</text-big>
+											<h4 translate>(Specify which conditions for the taskEdit.)</h4>										
+											<textarea ui-tinymce="tinymceOptionsMid" placeholder="{{conditionplaceholder}}" name="conditions" ng-model="langs.conditions"></textarea>
+										</div>
+										<hr>
+										<div class="form-group">
+											<text-big class="text-padding10" for="taskReward" translate>Reward</text-big>
+											<h4 translate>(If you wish, you can specify a reward for the task)</h4>										
+											<input type="text" class="form-control" rows="1" id="taskReward" placeholder="{{rewardplaceholder}}" name="reward" ng-model="langs.reward">
+										</div>											
+																			
+									</div>
+								</uib-accordion>									
+								<div class="row">								
+									<div class="col-md-5 checkbox-place space-bottom20">									
+										<input type="checkbox" class="mid-checkbox" ng-model="accordion.oneAtATime"/>
+											<span class="checkbox-text"><translate> Open only one language panel.</translate></span>	
+									</div>									
+									<div class="col-md-3 nopadding">
+										<div ng-if="taskLang.length > 0">
+											<ui-select ng-model="taskEdit.langs.selected" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" search-enabled = "false">
+												<ui-select-match placeholder="{{languageplaceholder}}">{{$select.selected.nativeName}}</ui-select-match>
+												<ui-select-choices repeat="unit in taskLang"
+													refresh="unit($select.search)"
+													refresh-delay="0">
+													{{unit.nativeName}}
+												</ui-select-choices>
+											</ui-select>
+										</div>	
+									</div>
+									<div class="col-md-4">
+										<a class="btn btn-metathesis pull-right" class="btn" ng-click="addLang()" translate>Add Task Language</a>
+									</div>	
+								</div>	
+								<hr>									
+								<div class="form-group">
+								
+									<text-big class="text-padding10" for="taskLocation" translate>Address</text-big>									
+									<text-big class="text-padding10" for="taskReward" translate>Show task address for everyone?</text-big>
+									<h4 translate>(If you check the box, the address of your task will visible to other people's.)</h4>
+																				
+									<div class="form-group">
+										<div class="checkbox">
+											<label>
+												<input type="checkbox" class="mid-checkbox" id="notshowmarker" ng-click="requireLocation($event)" ng-model="taskEdit.showaddress" value="true"/> <span class="checkbox-text18" translate> Show address.</span>
+											</label>
+										</div>
+									</div>
+									<h4 translate>(Specify the address of task, You can hide it until you want to show it)</h4>
+										
+									<input type="text" class="form-control" rows="1" id="taskLocation" placeholder="{{addressplaceholder}}" name="location" ng-model="taskEdit.address">
+								</div>
+								<hr>
+								<div class="form-group">
+									<text-big class="text-padding10" for="taskPlace" translate>Place on the map</text-big>
+								</div>
+								<div class="form-group">
+									<div class="space20">	
+										<input id="pac-input" type="text" placeholder="Search Box" class="controls">
+										<div id="map"></div>
+										<div>
+											<input size="20" class="form-control hidden" type="text" ng-model="taskEdit.position.coordinates[1]" id="coordLat" name="coordLat">
+											<input size="20" class="form-control hidden" type="text" ng-model="taskEdit.position.coordinates[0]" id="coordLon" name="coordLon">
+											<input size="20" class="form-control hidden" type="text" ng-model="taskEdit.range" id="range" name="range" ng-readonly = "true">
+										</div>
+									</div>		
+								</div>
+								<hr>
+								<div class="form-group" id="rangeGroup">
+									<text-big class="text-padding10" for="taskArea" translate>Add execution area</text-big>
+									<h4 translate>(Check the box if you want to edit an area in which you can act to solve the taskEdit. To change the area, drag the points on the circle)</h4>
+									<div class="form-group">										
+										<div class="checkbox">
+											<label ng-click="range($event)">
+												<input type="checkbox" class="mid-checkbox" id="addRange" data-toggle="collapse" data-target="#areaCollapse" ng-model="addrange" value="true" /> <span class="checkbox-text18" translate> Add range area.</span>
+											</label>
+										</div>
+									</div>
+									<div class="col-dm-12 space20">
+										<div  id="areaCollapse" class="panel-collapse collapse">
+											<div class="panel-body">
+												<h4 translate>(Describe briefly what the area you have added is.)</h4>												
+												<input type="text" class="form-control" rows="2" id="taskAreaDecs" placeholder="{{taskareaplaceholder}}" name="areaDescription" ng-model="taskEdit.areadesc">
+												
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<div class="checkbox">
+																<label>
+																	<input type="checkbox" class="mid-checkbox" id="moveInArea" ng-model="taskEdit.moverange" value="true"/> <span class="checkbox-text18" translate> You move around in this area.</span>
+																</label>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<div class="checkbox">
+																<label>
+																	<input type="checkbox" class="mid-checkbox" ng-model="taskEdit.actrange" id="actInArea1" value="true"/> <span class="checkbox-text18" translate> You can act in this range.</span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>	
+											</div>
+										</div>	
+									</div>									
+								</div>
+								<hr>
+								<div ng-if="images[0]">
+									<div class="row">
+										<div class="col-md-12">
+											<text-big class="control-label" for="taskCategory" translate>Images</text-big>
+											<div class="center90 delgallery ">
+												<ul class="list-unstyled row">
+													<li ng-repeat="image in images" data-src="{{image.lg}}">
+														<a class="containerOne" ng-click="deleteTaskImage($index)">
+															<img class="img-responsive" ng-src="{{image.thumb}}" />
+															<div class="midTextDel">
+																<div class="text-biggest textDel" translate>Delete</div>
+															</div>
+														</a>
+													</li>
+												</ul>
+											</div>							
+										</div>
+									</div>	
+									<hr>
+								</div>								
+								<div class="space-bottom20" ng-if="imagesCount()>0">	
+									<div class="form-group">
+										<div class="col-md-3">
+											<text-big class="text-padding10" for="taskPhoto"> <translate>Add Images</translate></text-big>										
+											<div ng-show="uploader.isHTML5">
+												<!-- 3. nv-file-over uploader="link" over-class="className" -->
+												
+												<!-- Example: nv-file-drop="" uploader="{Object}" options="{Object}" filters="{String}" -->
+												<div nv-file-drop="" name="file" uploader="uploader" options="{ url: '/foo' }">
+													<div nv-file-over="" uploader="uploader" over-class="another-file-over-class" class="well file-drop-zone" translate>
+														Drag the images to this area or add images in the usual way by clicking the button below.
+													</div>
+												</div>
+											</div>
+											
+											<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->                   
+											<input type="file" name="file" nv-file-select="" uploader="uploader" accept="image/*" multiple id="taskImages" style="display: none;">									
+											<a type="button" class="btn btn-metathesis btn-block space-bottom0" onclick="document.getElementById('taskImages').click();" translate>Browse images</a>
+											
+										</div>
+										<div class="col-md-9 ">										
+											<h4><translate>Upload only task images, you can add</translate> {{imagesCount()}} <translate>more pictures, max size of one is 2Mb</translate></h4>										
+											<h4><translate>Total images to upload:</translate> {{ uploader.queue.length }}</h4>
+											<table class="table">
+												<thead>
+													<tr>
+														<th class="h4" width="40%" translate>Name</th>
+														<th class="h4" ng-show="uploader.isHTML5" translate>Size</th>
+														<th class="h4" ng-show="uploader.isHTML5" translate>Progress</th>
+														<th class="h4" translate>Status</th>
+														<th class="h4" translate>Actions</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="item in uploader.queue">
+														<td>
+															<h4>{{ item.file.name }}</h4>
+															<!-- Image preview -->
+															<!--auto height-->
+															<!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+															<!--auto width-->
+															<div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 120 }"></div>
+															<!--fixed width and height -->
+															<!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+														</td>
+														<td ng-show="uploader.isHTML5" nowrap><div class="h4 space10">{{ item.file.size/1024/1024|number:2 }} MB</div>
+														</td>
+														<td ng-show="uploader.isHTML5">
+															<div class="progress space10" style="margin-bottom: 0;">
+																<div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+															</div>
+														</td>
+														<td class="text-center">
+															<div class="space10">
+															<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+															<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+															<span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></div>
+														</td>
+														<td nowrap>	
+															<button type="button" class="btn btn-danger btn-s" ng-click="item.remove()">
+																<span class="glyphicon glyphicon-trash"></span> <translate>Remove</translate>
+															</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div>
+												<div>
+													<translate>Total progress:</translate>
+													<div class="progress" style="">
+														<div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+													</div>
+												</div>	
+												<button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+													<span class="glyphicon glyphicon-trash"></span> <translate>Remove all</translate>
+												</button>
+											</div>
+										</div>
+									</div>									
+								</div>
+								<div class="col-md-12">
+									<hr>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12 checkbox-place space-bottom20">
+										<input type="checkbox" class="mid-checkbox" id="checkboxTaskSubmit" onchange="document.getElementById('taskSubmit').disabled = !this.checked;" />
+										<span class="checkbox-text"> <translate>I agree with the</translate> <a ng-click="taskRules()" translate>rules</a>&nbsp;</span>
+									</div>
+								</div>								
+								<div class="form-group">
+									<div class="col-md-3 col-md-offset-2 button-wrapper">
+									<button class="btn btn-lg btn-success btn-block" id="taskSubmit" type="submit" disabled="disabled" translate>Save</button>
+									</div>
+									<div class="col-md-3 col-md-offset-2">
+										<a class="btn btn-lg btn-default btn-block" role="button" ng-click="cancelTask()" translate>Cancel</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</content>
+	</body>
+</html>
