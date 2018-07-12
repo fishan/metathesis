@@ -43,8 +43,8 @@ app.all('*', function(req, res, next){
 
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(function(req,res,next){setTimeout(next,3000)});
@@ -58,7 +58,8 @@ app.use(cookieParser());
 
 // passport config
 app.use(passport.initialize());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public/app/')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/', routes);
 app.use('/users', users);
@@ -97,6 +98,10 @@ app.use(function(err, req, res, next) {
 		message: err.message,
 		error: {}
 	});
+});
+
+app.get('*', function(req, res) {
+        res.sendfile('./public/app/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 });
 
 
