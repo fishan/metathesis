@@ -24,7 +24,7 @@ var users = require('./routes/users');
 var taskRouter = require('./routes/taskRouter');
 var profileRouter = require('./routes/profileRouter');
 var infoRouter = require('./routes/infoRouter');
-var favoriteRouter = require('./routes/favoriteRouter');
+//var favoriteRouter = require('./routes/favoriteRouter');
 var complainRouter = require('./routes/complainRouter');
 var proposalRouter = require('./routes/proposalRouter');
 
@@ -66,7 +66,7 @@ app.use('/users', users);
 app.use('/tasks', taskRouter);
 app.use('/profiles', profileRouter);
 app.use('/infos', infoRouter);
-app.use('/favorites', favoriteRouter);
+//app.use('/favorites', favoriteRouter);
 app.use('/complains', complainRouter);
 app.use('/proposals', proposalRouter);
 
