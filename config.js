@@ -2,7 +2,7 @@ module.exports = {
     'secretKey': '12345-67890-09876-54321',
     'mongoUrl' : 'mongodb://metathesis:Kl12l1l1@metathesis-shard-00-00-etr45.mongodb.net:27017,metathesis-shard-00-01-etr45.mongodb.net:27017,metathesis-shard-00-02-etr45.mongodb.net:27017/test?ssl=true&replicaSet=metathesis-shard-0&authSource=admin&retryWrites=true',
 	//'mongoUrl' : 'mongodb://localhost:27017/metathesis',
-	'serverUrl': 'https://localhost:3443/',
+	'serverUrl': 'https://localhost:8080/',
 	//'serverUrl': 'https://localhost:3000/',
 	'userDir': './public/users',
 	
